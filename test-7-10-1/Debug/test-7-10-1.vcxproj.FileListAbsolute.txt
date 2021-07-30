@@ -1,0 +1,2 @@
+E:\C++Code\Code\2021\Jule\7-10\test-7-10-1\Debug\test-7-10-1.exe
+E:\C++Code\Code\2021\Jule\7-10\test-7-10-1\Debug\test-7-10-1.pdb
