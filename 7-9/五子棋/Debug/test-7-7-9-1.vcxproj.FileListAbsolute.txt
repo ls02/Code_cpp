@@ -1,4 +1,0 @@
-E:\C++Code\Code\2021\Jule\7-9\test-7-7-9-1\Debug\test-7-7-9-1.exe
-E:\C++Code\Code\2021\Jule\7-9\test-7-7-9-1\Debug\test-7-7-9-1.pdb
-E:\C++Code\Code\2021\Jule\7-9\五子棋\Debug\test-7-7-9-1.exe
-E:\C++Code\Code\2021\Jule\7-9\五子棋\Debug\test-7-7-9-1.pdb
