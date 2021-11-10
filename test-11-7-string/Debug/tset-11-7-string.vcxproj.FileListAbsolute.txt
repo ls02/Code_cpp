@@ -1,0 +1,2 @@
+E:\C++Code\Code\2021\Nov\11-7\tset-11-7-string\Debug\tset-11-7-string.exe
+E:\C++Code\Code\2021\Nov\11-7\tset-11-7-string\Debug\tset-11-7-string.pdb
