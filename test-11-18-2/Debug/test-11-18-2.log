@@ -1,0 +1,4 @@
+﻿  test.cpp
+E:\C++Code\Code\2021\Nov\11-18\test-11-18-2\test.cpp(56,4): warning C4101: “a”: 未引用的局部变量
+E:\C++Code\Code\2021\Nov\11-18\test-11-18-2\test.cpp(55,7): warning C4101: “bo”: 未引用的局部变量
+  test-11-18-2.vcxproj -> E:\C++Code\Code\2021\Nov\11-18\test-11-18-2\Debug\test-11-18-2.exe
