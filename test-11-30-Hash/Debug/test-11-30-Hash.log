@@ -1,0 +1,8 @@
+﻿  test.cpp
+E:\C++Code\Code\2021\Nov\11-30\test-11-30-Hash\test.cpp(9,3): error C2065: “ht”: 未声明的标识符
+E:\C++Code\Code\2021\Nov\11-30\test-11-30-Hash\test.cpp(12,2): error C2065: “ht”: 未声明的标识符
+E:\C++Code\Code\2021\Nov\11-30\test-11-30-Hash\test.cpp(14,13): error C2065: “ht”: 未声明的标识符
+E:\C++Code\Code\2021\Nov\11-30\test-11-30-Hash\test.cpp(16,20): error C3536: “ret”: 初始化之前无法使用
+E:\C++Code\Code\2021\Nov\11-30\test-11-30-Hash\test.cpp(16,20): error C2446: “!=”: 没有从“int”到“nullptr”的转换
+E:\C++Code\Code\2021\Nov\11-30\test-11-30-Hash\test.cpp(16,17): message : 仅空指针常数可转换为 nullptr_t
+E:\C++Code\Code\2021\Nov\11-30\test-11-30-Hash\HashTable.h(7): fatal error C1075: “{”: 未找到匹配令牌
