@@ -1,0 +1,18 @@
+﻿  test.cpp
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\openHash.h(184,9): error C2143: 语法错误: 缺少“;”(在“<”的前面)
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\openHash.h(186): message : 查看对正在编译的 类 模板 实例化“OpenHash::HashTable<K,V,HashFunc>”的引用
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\openHash.h(184,1): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\openHash.h(184,1): error C2238: 意外的标记位于“;”之前
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\openHash.h(89,17): error C2760: 语法错误: 意外标记 ">"，应为 "表达式"
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\openHash.h(130,8): error C2065: “_table”: 未声明的标识符
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\openHash.h(130,8): error C3861: “_table”: 找不到标识符
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\openHash.h(136,29): error C3861: “_table”: 找不到标识符
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\openHash.h(137,16): error C3861: “_table”: 找不到标识符
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\openHash.h(155,29): error C3861: “_table”: 找不到标识符
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\openHash.h(157,16): error C3861: “_table”: 找不到标识符
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\openHash.h(162,10): error C3861: “_table”: 找不到标识符
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\openHash.h(164,7): error C3861: “_table”: 找不到标识符
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\test.cpp(6,13): error C2734: “a”: 如果不是外部的，则必须初始化常量对象
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\test.cpp(7,10): error C2131: 表达式的计算结果不是常数
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\test.cpp(7,10): message : 因读取超过生命周期的变量而失败
+E:\C++Code\Code\2021\December\12-3\test-12-3-OpenHash\test.cpp(7,10): message : 请参见“a”的用法
