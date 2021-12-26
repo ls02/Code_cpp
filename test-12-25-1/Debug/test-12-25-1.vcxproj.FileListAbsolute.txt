@@ -1,2 +1,0 @@
-E:\C++Code\Code\2021\December\12-25\test-12-25-1\Debug\test-12-25-1.exe
-E:\C++Code\Code\2021\December\12-25\test-12-25-1\Debug\test-12-25-1.pdb
