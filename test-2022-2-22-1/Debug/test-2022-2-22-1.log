@@ -1,0 +1,4 @@
+﻿  test.cpp
+E:\C++Code\Code\2022\February\22\test-2022-2-22-1\test.cpp(15,4): error C3646: “_B”: 未知重写说明符
+E:\C++Code\Code\2022\February\22\test-2022-2-22-1\test.cpp(15,7): error C2059: 语法错误:“=”
+E:\C++Code\Code\2022\February\22\test-2022-2-22-1\test.cpp(15,10): error C2238: 意外的标记位于“;”之前
