@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <algorithm>
 
+//
 namespace ls
 {
 	template<class T>
