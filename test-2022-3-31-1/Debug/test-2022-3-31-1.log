@@ -1,0 +1,16 @@
+﻿  test.cpp
+E:\C++Code\Code\2022\March\31\test-2022-3-31-1\test.cpp(7,1): warning C4326: “main”的返回类型应为“int”而非“void”
+E:\C++Code\Code\2022\March\31\test-2022-3-31-1\test.cpp(8,2): error C2065: “undefined”: 未声明的标识符
+E:\C++Code\Code\2022\March\31\test-2022-3-31-1\test.cpp(10,3): error C2146: 语法错误: 缺少“;”(在标识符“WSAData”的前面)
+E:\C++Code\Code\2022\March\31\test-2022-3-31-1\test.cpp(13,3): error C2065: “undefined”: 未声明的标识符
+E:\C++Code\Code\2022\March\31\test-2022-3-31-1\test.cpp(14,4): error C2146: 语法错误: 缺少“;”(在标识符“cout”的前面)
+E:\C++Code\Code\2022\March\31\test-2022-3-31-1\test.cpp(21,3): error C2065: “undefined”: 未声明的标识符
+E:\C++Code\Code\2022\March\31\test-2022-3-31-1\test.cpp(22,4): error C2146: 语法错误: 缺少“;”(在标识符“cout”的前面)
+E:\C++Code\Code\2022\March\31\test-2022-3-31-1\test.cpp(26,3): error C2065: “undefined”: 未声明的标识符
+E:\C++Code\Code\2022\March\31\test-2022-3-31-1\test.cpp(27,4): error C2146: 语法错误: 缺少“;”(在标识符“cout”的前面)
+E:\C++Code\Code\2022\March\31\test-2022-3-31-1\test.cpp(34,3): error C2065: “undefined”: 未声明的标识符
+E:\C++Code\Code\2022\March\31\test-2022-3-31-1\test.cpp(35,4): error C2146: 语法错误: 缺少“;”(在标识符“cout”的前面)
+E:\C++Code\Code\2022\March\31\test-2022-3-31-1\test.cpp(39,3): error C2065: “undefined”: 未声明的标识符
+E:\C++Code\Code\2022\March\31\test-2022-3-31-1\test.cpp(44,4): error C2143: 语法错误: 缺少“;”(在“for”的前面)
+E:\C++Code\Code\2022\March\31\test-2022-3-31-1\test.cpp(46,5): error C2065: “undefined”: 未声明的标识符
+E:\C++Code\Code\2022\March\31\test-2022-3-31-1\test.cpp(47,13): error C2144: 语法错误:“in_addr”的前面应有“;”
