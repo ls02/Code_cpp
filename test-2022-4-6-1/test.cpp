@@ -1,5 +1,5 @@
 #include <iostream>
-//sdfsf
+//
 //template<class T, class P>
 //class A
 //{
