@@ -6,7 +6,7 @@ void Test1()
 	int arr2[] = { 4, 2, 6, 1, 3, 5, 15, 7, 16, 14 };
 	ls::AVLTree<int, int> t1;
 	ls::AVLTree<int, int> t2;
-	for (auto e : arr1)
+	for (auto e : arr2)
 	{
 		t2.Insert(std::make_pair(e, e));
 	}
@@ -21,6 +21,16 @@ void Test1()
 	t1.InOrder();
 	std::cout << t1.IsAVLTree() << std::endl;
 	std::cout << t2.IsAVLTree() << std::endl;
+
+	t1[110] = 30;
+	t1.InOrder();
+
+	ls::AVLTree<int, int> t3(t2);
+	ls::AVLTree<int, int> t4;
+	t4 = t2;
+
+	t3.InOrder();
+	t4.InOrder();
 }
 
 int main()

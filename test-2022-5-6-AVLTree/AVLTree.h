@@ -25,6 +25,7 @@ namespace ls
 			:_kv(kv)
 			,_left(nullptr)
 			,_right(nullptr)
+			,_parent(nullptr)
 			,_bf(0)
 		{}
 	};
@@ -225,10 +226,57 @@ namespace ls
 				_IsBalance(root->_right);
 		}
 
+		Node* _CopyAVLTree(const Node* root)
+		{
+			if (nullptr == root)
+			{
+				return nullptr;
+			}
+
+			Node* copyNode = new Node(root->_kv);
+			copyNode->_bf = root->_bf;
+			copyNode->_left = _CopyAVLTree(root->_left);
+			copyNode->_right= _CopyAVLTree(root->_right);
+
+			return copyNode;
+		}
+
+		void _Destroy(Node* root)
+		{
+			if (nullptr == root)
+			{
+				return;
+			}
+
+			Node* del = root;
+			_Destroy(root->_left);
+			_Destroy(root->_right);
+
+			delete root;
+		}
+
 	public:
 		AVLTree(void)
 			:_root(nullptr)
 		{}
+
+		AVLTree(const AVLTree<K, V>& t)
+		{
+			_root = _CopyAVLTree(t._root);
+		}
+
+		AVLTree<K, V>& operator=(AVLTree<K, V> t)
+		{
+			std::swap(t._root, _root);
+
+			return *this;
+		}
+
+		~AVLTree(void)
+		{
+			_Destroy(_root);
+			_root = nullptr;
+		}
 
 		std::pair<Node*, bool> Insert(const std::pair<K, V>& kv)
 		{
@@ -335,6 +383,35 @@ namespace ls
 			}//while (cur != _root) end...
 
 			return std::make_pair(newNode, true);
+		}
+
+		Node* Find(const K& key)
+		{
+			Node* cur = _root;
+			while (nullptr != cur)
+			{
+				if (cur->_kv.first > key)
+				{
+					cur = cur->_left;
+				}
+				else if (cur->_kv.second < key)
+				{
+					cur = cur->_right;
+				}
+				else
+				{
+					return cur;
+				}
+			}
+
+			return nullptr;
+		}
+
+		V& operator[](const K& key)
+		{
+			std::pair<Node*, bool> ret = Insert(std::make_pair(key, V()));
+
+			return ret.first->_kv.second;
 		}
 
 		bool IsAVLTree(void)
