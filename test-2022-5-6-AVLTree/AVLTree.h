@@ -186,6 +186,12 @@ namespace ls
 			std::cout << root->_kv.first << ":" << root->_kv.second << std::endl;
 			_InOrder(root->_right);
 		}
+
+		bool _IsBalance(Node* root)
+		{
+
+		}
+
 	public:
 		AVLTree(void)
 			:_root(nullptr)
@@ -296,6 +302,10 @@ namespace ls
 			return std::make_pair(newNode, true);
 		}
 
+		bool IsAVLTree(void)
+		{
+				return _IsBalance(_root);
+		}
 		void InOrder(void)
 		{
 			_InOrder(_root);
