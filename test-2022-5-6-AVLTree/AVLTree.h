@@ -5,6 +5,7 @@
 #include <iostream>
 #include <assert.h>
 #include <utility>
+#include <math.h>
 
 namespace ls
 {
@@ -72,6 +73,7 @@ namespace ls
 			subL->_bf = parent->_bf = 0;
 		}
 
+
 		void RotateL(Node* parent)
 		{
 			Node* subR = parent->_right;
@@ -112,11 +114,12 @@ namespace ls
 		{
 			Node* subL = parent->_left;
 			Node* subLR = subL->_right;
-			int bf = parent->_bf;
+			int bf = subLR->_bf;
 
 			RotateL(parent->_left);
 			RotateR(parent);
 
+			// ...平衡因子调节还需要具体分析
 			if (bf == -1)
 			{
 				subL->_bf = 0;
@@ -186,10 +189,40 @@ namespace ls
 			std::cout << root->_kv.first << ":" << root->_kv.second << std::endl;
 			_InOrder(root->_right);
 		}
+		int _Height(Node* root)
+		{
+			if (nullptr == root)
+			{
+				return 0;
+			}
+
+			int leftH = _Height(root->_left);
+			int rightH = _Height(root->_right);
+
+			return std::max(leftH, rightH) + 1;
+			//return leftH > rightH ? leftH + 1 : rightH + 1;
+		}
 
 		bool _IsBalance(Node* root)
 		{
+			if (nullptr == root)
+			{
+				return true;
+			}
 
+			int leftH = _Height(root->_left);
+			int rightH = _Height(root->_right);
+
+			if (rightH - leftH != root->_bf)
+			{
+				std::cout << "平衡因子异常:" << root->_kv.first << std::endl;
+
+				return false;
+			}
+
+			return abs(leftH - rightH) < 2 &&
+				_IsBalance(root->_left) &&
+				_IsBalance(root->_right);
 		}
 
 	public:
@@ -292,6 +325,8 @@ namespace ls
 							RotateRL(parent);
 						}
 					}
+
+					break;
 				}//else if (parent->_bf == -2 || parent->_bf == 2) end...
 				else
 				{
@@ -304,7 +339,7 @@ namespace ls
 
 		bool IsAVLTree(void)
 		{
-				return _IsBalance(_root);
+			return _IsBalance(_root);
 		}
 		void InOrder(void)
 		{
