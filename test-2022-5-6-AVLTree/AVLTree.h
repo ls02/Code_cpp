@@ -40,22 +40,44 @@ namespace ls
 			Node* subL = parent->_left;
 			Node* subLR = subL->_right;
 
-			parent->_right = subLR;
+			parent->_left = subLR;
 			subL->_right = parent;
+			Node* parentParent = parent->_parent;
 			parent->_parent = subL;
 
 			if (nullptr != subLR)
 			{
-
+				subLR->_parent = parent;
 			}
+
+			if (parent != _root)
+			{
+				if (parentParent->_left == parent)
+				{
+					parentParent->_left = subL;
+				}
+				else
+				{
+					parentParent->_right = subL;
+				}
+
+				subL->_parent = parentParent;
+			}
+			else
+			{
+				_root = subL;
+				_root->_parent = nullptr;
+			}
+
+			subL->_bf = parent->_bf = 0;
 		}
 
 		void RotateL(Node* parent)
 		{
 			Node* subR = parent->_right;
-			Node* sbRL = subR->_left;
+			Node* subRL = subR->_left;
 
-			parent->_left = subRL;
+			parent->_right = subRL;
 			subR->_left = parent;
 			Node* parentParent = parent->_parent;
 			parent->_parent = subR;
@@ -83,7 +105,86 @@ namespace ls
 				_root->_parent = nullptr;
 			}
 
-			parent->_bf = surR->_bf = 0;
+			parent->_bf = subR->_bf = 0;
+		}
+
+		void RotateLR(Node* parent)
+		{
+			Node* subL = parent->_left;
+			Node* subLR = subL->_right;
+			int bf = parent->_bf;
+
+			RotateL(parent->_left);
+			RotateR(parent);
+
+			if (bf == -1)
+			{
+				subL->_bf = 0;
+				parent->_bf = 1;
+				subLR->_bf = 0;
+			}
+			else if (bf == 1)
+			{
+				parent->_bf = 0;
+				subL->_bf = -1;
+				subLR->_bf = 0;
+			}
+			else if (bf == 0)
+			{
+				parent->_bf = 0;
+				subL->_bf = 0;
+				subLR->_bf = 0;
+			}
+			else
+			{
+				assert(false);
+			}
+		}
+
+		void RotateRL(Node* parent)
+		{
+			Node* subR = parent->_right;
+			Node* subRL = subR->_left;
+			int bf = subRL->_bf;
+
+			RotateR(parent->_right);
+			RotateL(parent);
+
+			// 平衡因子更新
+			if (bf == 1)
+			{
+				subR->_bf = 0;
+				parent->_bf = -1;
+				subRL->_bf = 0;
+			}
+			else if (bf == -1)
+			{
+				parent->_bf = 0;
+				subR->_bf = 1;
+				subRL->_bf = 0;
+			}
+			else if (bf == 0)
+			{
+				parent->_bf = 0;
+				subR->_bf = 0;
+				subRL->_bf = 0;
+			}
+			else
+			{
+				assert(false);
+			}
+		}
+
+		void _InOrder(Node* root)
+		{
+			if (nullptr == root)
+			{
+				return;
+			}
+
+			_InOrder(root->_left);
+			std::cout << root->_kv.first << ":" << root->_kv.second << std::endl;
+			_InOrder(root->_right);
 		}
 	public:
 		AVLTree(void)
@@ -169,7 +270,7 @@ namespace ls
 						//如果不是右单旋，说明是左右双旋
 						else//cur->_bf == 1
 						{
-
+							RotateLR(parent);
 						}
 					}
 					else//parent->_bf == 2
@@ -193,6 +294,11 @@ namespace ls
 			}//while (cur != _root) end...
 
 			return std::make_pair(newNode, true);
+		}
+
+		void InOrder(void)
+		{
+			_InOrder(_root);
 		}
 	};
 }
