@@ -10,6 +10,7 @@ void Test1()
 	{
 		t2.Insert(std::make_pair(e, e));
 	}
+
 	t1.Insert(std::make_pair(20, 1));
 	t1.Insert(std::make_pair(50, 2));
 	t1.Insert(std::make_pair(10, 3));
