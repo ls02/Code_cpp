@@ -196,7 +196,7 @@ namespace ls
 						}
 					}
 				}
-				else
+				else//parent == grandfather->_right
 				{
 
 				}
