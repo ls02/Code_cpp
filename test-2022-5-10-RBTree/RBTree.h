@@ -192,13 +192,37 @@ namespace ls
 						//左右双旋
 						else
 						{
+							RotatingL(parent);
+							RotatingR(grandfather);
 
+							cur->_col = BLACK;
+							grandfather->_col = RED;
 						}
+
+						break;
 					}
 				}
 				else//parent == grandfather->_right
 				{
+					Node* uncle = grandfather->_left;
+					
+					//情况一：叔叔存在且为红
+					if (nullptr != uncle && uncle->_col == RED)
+					{
+						parent->_col = uncle->_col = BLACK;
+						grandfather->_col = RED;
 
+						cur = grandfather;
+						parent = cur->_parent;
+					}
+					//情况二和三
+					else
+					{
+						if (cur == parent->_right)
+						{
+
+						}
+					}
 				}
 			}
 		}
