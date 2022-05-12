@@ -330,6 +330,29 @@ namespace ls
 			return std::make_pair(newNode, true);
 		}
 
+		Node* Find(const K& key)
+		{
+			Node* cur = _root;
+
+			while (nullptr != cur)
+			{
+				if (cur->_kv.first > key)
+				{
+					cur = cur->_left;
+				}
+				else if (cur->_kv.first < key)
+				{
+					cur = cur->_right;
+				}
+				else
+				{
+					return cur;
+				}
+			}
+
+			return nullptr;
+		}
+
 		bool IsRBTree(void)
 		{
 			if (nullptr == _root)
