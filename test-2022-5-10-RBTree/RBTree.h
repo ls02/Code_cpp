@@ -3,6 +3,7 @@
 #define __RBTREE_H__
 #include <iostream>
 #include <utility>
+#include <algorithm>
 
 namespace ls
 {
@@ -143,10 +144,58 @@ namespace ls
 				&& _IsRBTree(root->_right, blackCount, count);
 		}
 
+		Node* _CopyNode(Node* root)
+		{
+			if (nullptr == root)
+			{
+				return nullptr;
+			}
+
+			Node* Copy= new Node(root->_kv);
+
+			Copy->_left = _CopyNode(root->_left);
+			Copy->_right = _CopyNode(root->_right);
+
+			return Copy;
+		}
+
+		void _Destroy(Node* root)
+		{
+			if (nullptr == root)
+			{
+				return;
+			}
+
+			Node* cur = root;
+
+			_Destroy(root->_left);
+			_Destroy(root->_right);
+
+			delete cur;
+		}
+
 	public:
 		RBTree()
 			:_root(nullptr)
 		{}
+
+		RBTree(const RBTree<K, V>& t)
+		{
+			_root = _CopyNode(t._root);
+		}
+
+		RBTree<K, V>& operator=(RBTree<K, V> t)
+		{
+			std::swap(_root, t._root);
+
+			return *this;
+		}
+
+		~RBTree(void)
+		{
+			_Destroy(_root);
+			_root = nullptr;
+		}
 
 		std::pair<Node*, bool> Insert(std::pair<K, V> kv)
 		{
