@@ -38,57 +38,22 @@ namespace ls
 		typedef RBTreeNode<K, V> Node;
 		Node* _root;
 
-		void RotatingR(Node* parent)
-		{
-			Node* subL = parent->_left;
-			Node* subLR = subL->_right;
-
-			subL->_right = parent;
-			Node* parentParent = parent->_parent;
-			parent->_parent = subL;
-			parent->_left = subLR;
-
-			if (nullptr != subLR)
-			{
-				subLR->_parent = parent;
-			}
-
-			if (parent == _root)
-			{
-				_root = subL;
-				_root->_parent = nullptr;
-			}
-			else
-			{
-				if (parentParent->_left = parent)
-				{
-					parentParent->_left = subL;
-					subL->_parent = parentParent;
-				}
-				else
-				{
-					parentParent->_right = subL;
-					subL->_parent = parentParent;
-				}
-			}
-		}
-
-		void RotatingL(Node* parent)
+		void RotateL(Node* parent)
 		{
 			Node* subR = parent->_right;
 			Node* subRL = subR->_left;
 
-			subR->_left = parent;
-			Node* parentParent = parent->_parent;
-			parent->_parent = subR;
 			parent->_right = subRL;
-
-			if (nullptr !- subRL)
+			if (subRL)
 			{
 				subRL->_parent = parent;
 			}
 
-			if (_root == parent)
+			subR->_left = parent;
+			Node* parentParent = parent->_parent;
+			parent->_parent = subR;
+
+			if (parent == _root)
 			{
 				_root = subR;
 				_root->_parent = nullptr;
@@ -98,14 +63,84 @@ namespace ls
 				if (parentParent->_left == parent)
 				{
 					parentParent->_left = subR;
-					subR->_parent = parentParent;
 				}
 				else
 				{
 					parentParent->_right = subR;
-					subR->_parent = parentParent;
 				}
+				subR->_parent = parentParent;
 			}
+		}
+
+		void RotateR(Node* parent)
+		{
+			Node* subL = parent->_left;
+			Node* subLR = subL->_right;
+
+			parent->_left = subLR;
+			if (subLR)
+				subLR->_parent = parent;
+
+			subL->_right = parent;
+			Node* parentParent = parent->_parent;
+			parent->_parent = subL;
+
+			if (parent == _root)
+			{
+				_root = subL;
+				_root->_parent = nullptr;
+			}
+			else
+			{
+				if (parentParent->_left == parent)
+					parentParent->_left = subL;
+				else
+					parentParent->_right = subL;
+
+				subL->_parent = parentParent;
+			}
+		}
+
+		void _Inorder(Node* root)
+		{
+			if (nullptr == root)
+			{
+				return;
+			}
+
+			_Inorder(root->_left);
+
+			std::cout << root->_kv.first << "：" << root->_kv.second << std::endl;
+			_Inorder(root->_right);
+		}
+
+		bool _IsRBTree(Node* root, int blackCount, int count)
+		{
+			if (nullptr == root)
+			{
+				if (count != blackCount)
+				{
+					std::cout << "黑色节点数量不相等" << std::endl;
+
+					return false;
+				}
+				return true;
+			}
+
+			if (root->_col == RED && root->_parent->_col == RED)
+			{
+				std::cout << "存在连续的红色节点" << std::endl;
+
+				return false;
+			}
+
+			if (root->_col == BLACK)
+			{
+				count++;
+			}
+
+			return _IsRBTree(root->_left, blackCount, count)
+				&& _IsRBTree(root->_right, blackCount, count);
 		}
 
 	public:
@@ -118,6 +153,7 @@ namespace ls
 			if (nullptr == _root)
 			{
 				_root = new Node(kv);
+				_root->_col = BLACK;
 
 				return std::make_pair(_root, true);
 			}
@@ -159,7 +195,7 @@ namespace ls
 			cur = newNode;
 
 			//变色处理
-			while (nullptr != parent || parent->_col == RED)
+			while (nullptr != parent && parent->_col == RED)
 			{
 				Node* grandfather = parent->_parent;
 
@@ -175,7 +211,7 @@ namespace ls
 
 						//接着往上处理
 						cur = grandfather;
-						grandfather = cur->_parent;
+						parent = cur->_parent;
 					}
 					//情况二：叔叔不存在或叔叔存在且为黑色，说明需要旋转处理
 					else
@@ -183,7 +219,7 @@ namespace ls
 						//右单炫
 						if (cur == parent->_left)
 						{
-							RotatingR(grandfather);
+							RotateR(grandfather);
 
 							//变色处理
 							parent->_col = BLACK;
@@ -192,8 +228,8 @@ namespace ls
 						//左右双旋
 						else
 						{
-							RotatingL(parent);
-							RotatingR(grandfather);
+							RotateL(parent);
+							RotateR(grandfather);
 
 							cur->_col = BLACK;
 							grandfather->_col = RED;
@@ -218,13 +254,67 @@ namespace ls
 					//情况二和三
 					else
 					{
+						//单旋
 						if (cur == parent->_right)
 						{
-
+							RotateL(grandfather);
+							parent->_col = BLACK;
+							grandfather->_col = RED;
 						}
+						//双旋
+						else
+						{
+							RotateR(parent);
+							RotateL(grandfather);
+
+							cur->_col = BLACK;
+							grandfather->_col = RED;
+						}
+
+						break;
 					}
-				}
+				}//parent == grandfather->_right end....
+			}//nullptr != parent || parent->_col == RED end...
+
+			_root->_col = BLACK;
+
+			return std::make_pair(newNode, true);
+		}
+
+		bool IsRBTree(void)
+		{
+			if (nullptr == _root)
+			{
+				return true;
 			}
+
+			if (_root->_col == RED)
+			{
+				std::cout << "根节点为红色" << std::endl;
+
+				return false;
+			}
+
+			Node* left = _root;
+			int blackCount = 0;
+			while (nullptr != left)
+			{
+				if (left->_col == BLACK)
+				{
+					blackCount++;
+				}
+
+				left = left->_left;
+			}
+
+			int count = 0;
+
+			return _IsRBTree(_root, blackCount, count);
+		}
+
+		void Inorder(void)
+		{
+			_Inorder(_root);
 		}
 	};
 }
