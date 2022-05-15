@@ -22,13 +22,13 @@ namespace ls
 		RBTreeNode<T>* _parent;
 
 		color _col;
-		std::pair<T, T> __data;
+		T _data;
 
 		RBTreeNode(const T& data)
 			: _left(nullptr)
 			, _right(nullptr)
 			, _parent(nullptr)
-			, __data(data)
+			, _data(data)
 			, _col(RED)
 		{}
 	};
@@ -46,12 +46,12 @@ namespace ls
 
 		Ref operator*(void)
 		{
-			return _node->__data;
+			return _node->_data;
 		}
 
 		Ptr operator->(void)
 		{
-			return &_node->__data;
+			return &_node->_data;
 		}
 
 		bool operator!=(const Self& s) const
@@ -205,7 +205,7 @@ namespace ls
 
 			_Inorder(root->_left);
 
-			std::cout << root->__data.first << "£º" << root->__data.second << std::endl;
+			std::cout << root->_data.first << "£º" << root->_data.second << std::endl;
 			_Inorder(root->_right);
 		}
 
@@ -245,7 +245,7 @@ namespace ls
 				return nullptr;
 			}
 
-			Node* Copy = new Node(root->__data);
+			Node* Copy = new Node(root->_data);
 
 			Copy->_left = _CopyNode(root->_left);
 			Copy->_right = _CopyNode(root->_right);
@@ -341,12 +341,12 @@ namespace ls
 			Node* parent = nullptr;
 			while (nullptr != cur)
 			{
-				if (KeyOfT(cur->__data) > data)
+				if (KeyOfT()(cur->_data) > KeyOfT()(data))
 				{
 					parent = cur;
 					cur = cur->_left;
 				}
-				else if (KeyOfT(cur->__data) < data)
+				else if (KeyOfT()(cur->_data) < KeyOfT()(data))
 				{
 					parent = cur;
 					cur = cur->_right;
@@ -359,7 +359,7 @@ namespace ls
 
 			Node* newNode = new Node(data);
 
-			if (KeyOfT(parent->__data) > data)
+			if (KeyOfT()(parent->_data) > KeyOfT()(data))
 			{
 				parent->_left = newNode;
 				newNode->_parent = parent;
@@ -466,11 +466,11 @@ namespace ls
 
 			while (nullptr != cur)
 			{
-				if (KeyOfT(cur->__data) > key)
+				if (KeyOfT()(cur->_data) > KeyOfT()(key))
 				{
 					cur = cur->_left;
 				}
-				else if (KeyOfT(cur->__data) < key)
+				else if (KeyOfT(cur->_data) < KeyOfT()(key))
 				{
 					cur = cur->_right;
 				}
