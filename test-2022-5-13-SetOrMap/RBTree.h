@@ -4,6 +4,7 @@
 #include <iostream>
 #include <utility>
 #include <algorithm>
+#include "Iterator.h"
 
 namespace ls
 {
@@ -13,30 +14,123 @@ namespace ls
 		BLACK
 	};
 
-	template<class K, class V>
+	template<class T>
 	struct RBTreeNode
 	{
-		RBTreeNode<K, V>* _left;
-		RBTreeNode<K, V>* _right;
-		RBTreeNode<K, V>* _parent;
+		RBTreeNode<T>* _left;
+		RBTreeNode<T>* _right;
+		RBTreeNode<T>* _parent;
 
 		color _col;
-		std::pair<K, V> _kv;
+		std::pair<T, T> __data;
 
-		RBTreeNode(std::pair<K, V> kv)
+		RBTreeNode(const T& data)
 			: _left(nullptr)
-			,_right(nullptr)
-			,_parent(nullptr)
-			,_kv(kv)
-			,_col(RED)
+			, _right(nullptr)
+			, _parent(nullptr)
+			, __data(data)
+			, _col(RED)
 		{}
 	};
 
-	template<class K, class V>
+	template <class T, class Ref, class Ptr>
+	struct __TreeIterator
+	{
+		typedef RBTreeNode<T> Node;
+		typedef __TreeIterator<T, Ref, Ptr> Self;
+		Node* _node;
+
+		__TreeIterator(Node* node)
+			:_node(node)
+		{}
+
+		Ref operator*(void)
+		{
+			return _node->__data;
+		}
+
+		Ptr operator->(void)
+		{
+			return &_node->__data;
+		}
+
+		bool operator!=(const Self& s) const
+		{
+			return _node != s._node;
+		}
+
+		bool operator==(const Self& s)const
+		{
+			return _node == s._node;
+		}
+		Self& operator++()
+		{
+			if (_node->_right)
+			{
+				// 下一个访问就是右树中，中序的第一个节点
+				Node* left = _node->_right;
+				while (left->_left)
+				{
+					left = left->_left;
+				}
+
+				_node = left;
+			}
+			else
+			{
+				// 找祖先里面还是不是父亲的右的那个
+				// 因为 cur 右为空，说明cur所在的子树已经访问完了
+				// cur是parent的右的，说明parent也访问完了，继续往上去找
+				Node* cur = _node;
+				Node* parent = cur->_parent;
+				while (parent && cur == parent->_right)
+				{
+					cur = cur->_parent;
+					parent = parent->_parent;
+				}
+
+				_node = parent;
+			}
+
+			return *this;
+		}
+
+		Self& operator--()
+		{
+			if (_node->_left)
+			{
+				// 左子树的最右节点
+				Node* right = _node->_left;
+				while (right->_right)
+				{
+					right = right->_right;
+				}
+
+				_node = right;
+			}
+			else
+			{
+				Node* cur = _node;
+				Node* parent = cur->_parent;
+				while (parent && cur == parent->_left)
+				{
+					cur = parent;
+					parent = parent->_parent;
+				}
+
+				_node = parent;
+			}
+
+			return *this;
+		}
+	};
+
+	template<class K, class T, class KeyOfT>
 	class RBTree
 	{
+		typedef RBTreeNode<T> Node;
+
 	private:
-		typedef RBTreeNode<K, V> Node;
 		Node* _root;
 
 		void RotateL(Node* parent)
@@ -111,7 +205,7 @@ namespace ls
 
 			_Inorder(root->_left);
 
-			std::cout << root->_kv.first << "：" << root->_kv.second << std::endl;
+			std::cout << root->__data.first << "：" << root->__data.second << std::endl;
 			_Inorder(root->_right);
 		}
 
@@ -151,7 +245,7 @@ namespace ls
 				return nullptr;
 			}
 
-			Node* Copy= new Node(root->_kv);
+			Node* Copy = new Node(root->__data);
 
 			Copy->_left = _CopyNode(root->_left);
 			Copy->_right = _CopyNode(root->_right);
@@ -175,16 +269,52 @@ namespace ls
 		}
 
 	public:
+
+		typedef __TreeIterator < T, T&, T* > iterator;
+		typedef __TreeIterator < T, const T&, const T* > const_iterator;
+		typedef ReverseIterator<iterator> reverse_iterator;
+
+		reverse_iterator rbegin()
+		{
+			Node* right = _root;
+			while (right && right->_right)
+			{
+				right = right->_right;
+			}
+			return reverse_iterator(iterator(right));
+		}
+
+		reverse_iterator rend()
+		{
+			return reverse_iterator(iterator(nullptr));
+		}
+
+		iterator begin()
+		{
+			Node* left = _root;
+			while (left && left->_left)
+			{
+				left = left->_left;
+			}
+
+			return iterator(left);
+		}
+
+		iterator end()
+		{
+			return iterator(nullptr);
+		}
+
 		RBTree()
 			:_root(nullptr)
 		{}
 
-		RBTree(const RBTree<K, V>& t)
+		RBTree(const RBTree<K, T, KeyOfT>& t)
 		{
 			_root = _CopyNode(t._root);
 		}
 
-		RBTree<K, V>& operator=(RBTree<K, V> t)
+		RBTree<K, T, KeyOfT>& operator=(RBTree<K, T, KeyOfT> t)
 		{
 			std::swap(_root, t._root);
 
@@ -197,39 +327,39 @@ namespace ls
 			_root = nullptr;
 		}
 
-		std::pair<Node*, bool> Insert(std::pair<K, V> kv)
+		std::pair<iterator, bool> Insert(const T& data)
 		{
 			if (nullptr == _root)
 			{
-				_root = new Node(kv);
+				_root = new Node(data);
 				_root->_col = BLACK;
 
-				return std::make_pair(_root, true);
+				return std::make_pair(iterator(_root), true);
 			}
 
 			Node* cur = _root;
 			Node* parent = nullptr;
 			while (nullptr != cur)
 			{
-				if (cur->_kv.first > kv.first)
+				if (KeyOfT(cur->__data) > data)
 				{
 					parent = cur;
 					cur = cur->_left;
 				}
-				else if (cur->_kv.first < kv.first)
+				else if (KeyOfT(cur->__data) < data)
 				{
 					parent = cur;
 					cur = cur->_right;
 				}
 				else
 				{
-					return std::make_pair(cur, false);
+					return std::make_pair(iterator(cur), false);
 				}
 			}
 
-			Node* newNode = new Node(kv);
+			Node* newNode = new Node(data);
 
-			if (parent->_kv.first > kv.first)
+			if (KeyOfT(parent->__data) > data)
 			{
 				parent->_left = newNode;
 				newNode->_parent = parent;
@@ -290,7 +420,7 @@ namespace ls
 				else//parent == grandfather->_right
 				{
 					Node* uncle = grandfather->_left;
-					
+
 					//情况一：叔叔存在且为红
 					if (nullptr != uncle && uncle->_col == RED)
 					{
@@ -336,11 +466,11 @@ namespace ls
 
 			while (nullptr != cur)
 			{
-				if (cur->_kv.first > key)
+				if (KeyOfT(cur->__data) > key)
 				{
 					cur = cur->_left;
 				}
-				else if (cur->_kv.first < key)
+				else if (KeyOfT(cur->__data) < key)
 				{
 					cur = cur->_right;
 				}
@@ -390,6 +520,4 @@ namespace ls
 		}
 	};
 }
-
-
 #endif
