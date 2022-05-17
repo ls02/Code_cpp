@@ -148,4 +148,183 @@ namespace CloseHash
 	};
 }
 
+namespace OpenHash
+{
+	template<class K, class V>
+	struct HashNode
+	{
+		HashNode<K, V>* _next;
+		std::pair<K, V> _kv;
+
+		HashNode(const std::pair<K, V>& kv)
+			:_next(nullptr)
+			,_kv(kv)
+		{}
+	};
+
+	template<class K>
+	struct Hash
+	{
+		size_t operator()(const K& key)
+		{
+			return key;
+		}
+	};
+
+	template<>
+	struct Hash <std::string>
+	{
+		size_t operator()(const std::string& str)
+		{
+			size_t val = 0;
+
+			for (auto ch : str)
+			{
+				val += ch;
+				val *= 131;
+			}
+
+			return val;
+		}
+	};
+
+	template <class K, class V,class HashFunc = Hash<K>>
+	class HashTable
+	{
+		typedef HashNode<K,V> Node;
+	private:
+		std::vector<Node*> _table;
+		size_t _n = 0;
+
+		size_t GetNextPrime(size_t prime)
+		{
+			const int PRIMECOUNT = 28;
+			static const size_t primeList[PRIMECOUNT] =
+			{
+				53ul, 97ul, 193ul, 389ul, 769ul,
+				1543ul, 3079ul, 6151ul, 12289ul, 24593ul,
+				49157ul, 98317ul, 196613ul, 393241ul, 786433ul,
+				1572869ul, 3145739ul, 6291469ul, 12582917ul, 25165843ul,
+				50331653ul, 100663319ul, 201326611ul, 402653189ul, 805306457ul,
+				1610612741ul, 3221225473ul, 4294967291ul
+			};
+
+			size_t i = 0;
+			for (; i < PRIMECOUNT; ++i)
+			{
+				if (primeList[i] > prime)
+					return primeList[i];
+			}
+
+			return primeList[i];
+		}
+
+	public:
+		bool Insert(const std::pair<K, V> kv)
+		{
+			if (nullptr != Find(kv.first))
+			{
+				return false;
+			}
+
+			if (_n == _table.size())
+			{
+				std::vector<Node*> newTable;
+				newTable.resize(GetNextPrime(_table.size()));
+
+				for (size_t i = 0; i < _table.size(); i++)
+				{
+					if (nullptr != _table[i])
+					{
+						Node* cur = _table[i];
+
+						while (nullptr != cur)
+						{
+							Node* next = cur->_next;
+							size_t index = HashFunc()(cur->_kv.first) % newTable.size();
+							cur->_next = newTable[index];
+							newTable[index] = cur;
+
+							cur = next;
+						}
+
+						_table[i] = nullptr;
+					}
+				}
+
+				_table.swap(newTable);
+			}
+
+			size_t index = HashFunc()(kv.first) % _table.size();
+			Node* newNode = new Node(kv);
+
+			newNode->_next = _table[index];
+			_table[index] = newNode;
+			++_n;
+
+			return true;
+		}
+
+		Node* Find(const K& key)
+		{
+			if (!_table.size())
+			{
+				return nullptr;
+			}
+
+			size_t index = HashFunc()(key) % _table.size();
+
+			Node* cur = _table[index];
+			while (nullptr != cur)
+			{
+				if (cur->_kv.first == key)
+				{
+					return cur;
+				}
+				else
+				{
+					cur = cur->_next;
+				}
+			}
+
+			return nullptr;
+		}
+
+		bool Erase(const K& key)
+		{
+			size_t index = HashFunc()(key) % _table.size();
+			Node* prev = nullptr;
+			Node* cur = _table[index];
+
+			while (nullptr != cur)
+			{
+				if (cur->_kv.first == key)
+				{
+					if (cur == _table[index])
+					{
+						_table[index] = cur->_next;
+					}
+					else
+					{
+						prev->_next = cur->_next;
+					}
+
+					delete cur;
+					cur = nullptr;
+					_n--;
+
+					return true;
+				}
+				else
+				{
+					prev = cur;
+					cur = cur->_next;
+				}
+			}
+
+			return false;
+		}
+	};
+}
+
 #endif
