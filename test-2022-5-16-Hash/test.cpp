@@ -1,4 +1,5 @@
 #include "HashTable.h"
+#include "BitSet.h"
 
 void TestHash1(void)
 {
@@ -27,9 +28,19 @@ void TestHash2(void)
 	h1.Erase(2);
 }
 
+void TestBitSet1(void)
+{
+	ls::BitSet<-1> b;
+
+	b.Set(30);
+
+	std::cout << b.Test(30) << std::endl;
+}
+
 int main(void)
 {
-	TestHash2();
+	TestBitSet1();
+	//TestHash2();
 	//TestHash1();
 	return 0;
 }
