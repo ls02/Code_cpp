@@ -21,6 +21,10 @@ void TestHash2(void)
 	h1.Insert(std::make_pair(3, 3));
 	h1.Insert(std::make_pair(4, 4));
 	h1.Insert(std::make_pair(11, 11));
+
+	h1.Erase(11);
+	h1.Erase(1);
+	h1.Erase(2);
 }
 
 int main(void)
