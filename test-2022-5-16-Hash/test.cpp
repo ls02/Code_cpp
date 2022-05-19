@@ -39,7 +39,7 @@ void TestBitSet1(void)
 
 int main(void)
 {
-	TestBitSet1();
+	//TestBitSet1();
 	//TestHash2();
 	//TestHash1();
 	return 0;
