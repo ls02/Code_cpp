@@ -37,9 +37,10 @@ void TestBitSet1(void)
 	std::cout << b.Test(30) << std::endl;
 }
 
+
 int main(void)
 {
-	//TestBitSet1();
+	TestBitSet1();
 	//TestHash2();
 	//TestHash1();
 	return 0;
