@@ -40,6 +40,7 @@ void TestBitSet1(void)
 
 int main(void)
 {
+	//Test
 	TestBitSet1();
 	TestHash2();
 	TestHash1();
