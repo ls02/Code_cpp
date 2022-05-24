@@ -1,5 +1,6 @@
 #include "HashTable.h"
 #include "BitSet.h"
+#include "BloomFilter.h"
 
 void TestHash1(void)
 {
@@ -41,8 +42,9 @@ void TestBitSet1(void)
 int main(void)
 {
 	//Test
-	TestBitSet1();
-	TestHash2();
-	TestHash1();
+	TestBloomFilter();
+	//TestBitSet1();
+	//TestHash2();
+	//TestHash1();
 	return 0;
 }
